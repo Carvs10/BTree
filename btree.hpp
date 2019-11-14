@@ -47,3 +47,38 @@ ArvBNode::ArvBNode(int _t, bool _leaf)
 
 	n = 0;
 }
+
+
+ArvBNode * ArvBNode::search(int k)
+{
+
+	int i = 0;
+
+	while(i < n && k > keys[i])
+		i++;
+
+
+	if (leaf == true)
+		return NULL;
+
+	return C[i]->search(k);
+
+
+}
+
+void ArvBNode::transverse()
+{
+
+	int i = 0;
+	for(i = 0; i < n; i++)
+	{
+
+		if(leaf == false)
+			C[i]->transverse();
+		cout << " " << keys[i]; 
+	}
+
+	if (leaf == false)
+		C[i]->transverse();
+}
+
