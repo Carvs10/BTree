@@ -1,84 +1,42 @@
+#ifndef BTREE
+#define BTREE
+
 #include <iostream>
 
 using namespace std;
 
-// Nó da Arvore B
-class ArvBNode
+// Nó da Árvore B
+class Pagina
 {
-	int t; // define o número de chaves em cada página
-	ArvBNode **C; // lista de ponteiros filhos
-	int n; // num de chaves atual
-	int *keys; // array de chaves 
-	bool leaf; // T se o node é folha
+	int *chaves;    // array de chaves 
+	int d;          // define o número de chaves em cada página
+	Pagina **F;     // lista de ponteiros filhos
+	int n;          // num de chaves atual
+	bool folha;     // true se o node é folha
 
-public:
-	ArvBNode(int _t, bool leaf); //Construtor 
+    public:
+	Pagina(int _d, bool _folha); //Construtor 
 
-	ArvBNode *search(int k); // retorna NULL se a chave não esta na tree 
+    void inserirNaoCheio(int chave);
+    void cisar(int i, Pagina *t);
+	void percorrer(); 
+	Pagina *buscar(int chave);  // retorna nullptr se a chave não esta na árvore 
 
-	void transverse(); 
-
+    friend class ArvoreB;   
 };
 
-class ArvB
+class ArvoreB
 {
-	ArvBNode *root;
-	int t;
+	Pagina *raiz;
+	int d;
 
-public:
+    public:
+	ArvoreB(int _d) { raiz = nullptr; d = _d; }
 
-	ArvB(int _t)
-	{ root = NULL; t = _t; }
+    void percorrer() { if (raiz != nullptr) raiz->percorrer(); }
+	Pagina* buscar (int chave) { return (raiz == nullptr) ? nullptr : raiz->buscar(chave); }
 
-	ArvBNode* search(int k)
-	{ return (root == NULL) NULL : root->search(k); }
-
-
+    void inserir (int chave);
 };
 
-ArvBNode::ArvBNode(int _t, bool _leaf)
-{
-	leaf = _leaf;
-	t = _t;
-
-
-	keys = new int[2*t-1];
-	C = new ArvBNode *[2*t];
-
-	n = 0;
-}
-
-
-ArvBNode * ArvBNode::search(int k)
-{
-
-	int i = 0;
-
-	while(i < n && k > keys[i])
-		i++;
-
-
-	if (leaf == true)
-		return NULL;
-
-	return C[i]->search(k);
-
-
-}
-
-void ArvBNode::transverse()
-{
-
-	int i = 0;
-	for(i = 0; i < n; i++)
-	{
-
-		if(leaf == false)
-			C[i]->transverse();
-		cout << " " << keys[i]; 
-	}
-
-	if (leaf == false)
-		C[i]->transverse();
-}
-
+#endif
