@@ -21,6 +21,26 @@ class Pagina
     void cisar(int i, Pagina *t);
 	void percorrer(); 
 	Pagina *buscar(int chave);  // retorna nullptr se a chave não esta na árvore 
+	void preencher(int indice);
+	void fusao(int indice);
+
+	// Operacoes associadas a remocao
+	void remover(int chave);
+
+	void removerDaFolha(int indice);
+
+	void removerDeNode(int indice);
+
+	int getAntecessor(int indice);
+
+	int getSucessor(int indice);
+
+	void pegarDoAnt(int indice);
+
+	void pegardoProx(int indice);
+
+	int acheChave(int chave);
+	
 
     friend class ArvoreB;   
 };
@@ -37,6 +57,10 @@ class ArvoreB
 	Pagina* buscar (int chave) { return (raiz == nullptr) ? nullptr : raiz->buscar(chave); }
 
     void inserir (int chave);
+
+    void remover(int chave);
+
+
 };
 
 #endif
