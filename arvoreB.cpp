@@ -1,4 +1,4 @@
-#include "btree.hpp"
+#include "arvoreB.hpp"
 
 Pagina::Pagina(int _d, bool _folha) {
 	d = _d;
@@ -16,7 +16,7 @@ void Pagina::percorrer() {
 		if(!folha)
 			F[i]->percorrer();
 		
-        cout << " " << chaves[i]; 
+        std::cout << " " << chaves[i]; 
 	}
 
 	if (!folha) 
@@ -139,13 +139,12 @@ void Pagina::remover(int chave)
             removerDeNaoFolha(indice);
     } else {
         if(folha) {
-            cout << "A chave " << chave << " nao esta na arvore\n";
             return;
         }
 
         bool flag = ( (indice == n) ? true : false); 
 
-        if(F[indice]->n <= d)
+        if(F[indice]->n < d)
             preencher(indice);
 
         if(flag && indice > n)
@@ -178,7 +177,7 @@ void Pagina::removerDeNaoFolha(int indice) {
     } else if ( F[indice+1] -> n >= d ) {
         int sucessor = getSucessor(indice);
         chaves[indice] = sucessor;
-        F[indice+1] -> remover(chave);
+        F[indice+1] -> remover(sucessor);
     } else {
         concatenar(indice);
         F[indice]->remover(chave);
@@ -272,7 +271,7 @@ void Pagina::pegarDoProx(int indice) {
     }
 
     filho->n += 1;
-    irmao -= 1;
+    irmao->n -= 1;
 
     return;
 }
@@ -285,8 +284,14 @@ void Pagina::concatenar(int indice) {
 
     for (int i = 0; i < irmao->n; ++i)
     {
-        filho->F[i+d] = irmao->F[i];
-    }    
+        filho->chaves[i+d] = irmao->chaves[i];
+    } 
+
+    if(!filho->folha) {
+        for(int i = 0; i<= irmao->n; i++) {
+            filho->F[i+d] = irmao->F[i];
+        }
+    }   
 
     for (int i = indice + 1; i < n; i++)
         chaves[i-1] = chaves[i];
@@ -303,7 +308,6 @@ void Pagina::concatenar(int indice) {
 
 void ArvoreB::remover (int chave) {
     if (!raiz) {
-        cout << "A árvore está vazia\n";
         return;
     }
 

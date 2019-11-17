@@ -1,4 +1,7 @@
-#include "btree.hpp"
+#include "arvoreB.hpp"
+#include <iostream>
+
+using namespace std;
 
 int main () {
     ArvoreB arvore = ArvoreB(3);
@@ -27,7 +30,7 @@ int main () {
     arvore.inserir(12); 
     arvore.inserir(6);
 
-    cout << "Percorrimento da árvore construída é ";
+    cout << "A árvore construída é ";
     arvore.percorrer();
 
     int k = 6;
@@ -39,32 +42,32 @@ int main () {
     cout << endl;
 
     arvore.remover(6); 
-    cout << "Traversal of tree after removing 6\n"; 
+    cout << "Árvore depois de remover 6\n"; 
     arvore.percorrer(); 
     cout << endl; 
   
     arvore.remover(13); 
-    cout << "Traversal of tree after removing 13\n"; 
+    cout << "Árvore depois de remover 13\n"; 
     arvore.percorrer(); 
     cout << endl; 
   
     arvore.remover(7); 
-    cout << "Traversal of tree after removing 7\n"; 
+    cout << "Árvore depois de remover 7\n"; 
     arvore.percorrer(); 
     cout << endl; 
   
     arvore.remover(4); 
-    cout << "Traversal of tree after removing 4\n"; 
+    cout << "Árvore depois de remover 4\n"; 
     arvore.percorrer(); 
     cout << endl; 
   
     arvore.remover(2); 
-    cout << "Traversal of tree after removing 2\n"; 
+    cout << "Árvore depois de remover 2\n"; 
     arvore.percorrer(); 
     cout << endl; 
   
     arvore.remover(16); 
-    cout << "Traversal of tree after removing 16\n"; 
+    cout << "Árvore depois de remover 16\n"; 
     arvore.percorrer(); 
     cout << endl; 
 

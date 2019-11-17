@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 // Nó da Árvore B
 class Pagina
 {
