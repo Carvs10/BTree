@@ -37,7 +37,7 @@ class Pagina
 
 	void pegarDoAnt(int indice);
 
-	void pegardoProx(int indice);
+	void pegarDoProx(int indice);
 
 	int acharChave(int chave);
 

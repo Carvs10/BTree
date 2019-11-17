@@ -19,7 +19,7 @@ void Pagina::percorrer() {
         cout << " " << chaves[i]; 
 	}
 
-	if (!folha)
+	if (!folha) 
 		F[i]->percorrer();
 }
 
@@ -145,7 +145,7 @@ void Pagina::remover(int chave)
 
         bool flag = ( (indice == n) ? true : false); 
 
-        if(F[indice]->n < d)
+        if(F[indice]->n <= d)
             preencher(indice);
 
         if(flag && indice > n)
@@ -206,10 +206,10 @@ int Pagina::getSucessor(int indice) {
 
 
 void Pagina::preencher(int indice) {
-    if(indice != 0 && F[indice-1] ->n >= d) {
+    if(indice != 0 && F[indice-1] ->n > d) {
         pegarDoAnt(indice);
-    } else if(indice != n && F[indice+1] -> n >= d) {
-        pegardoProx(indice);
+    } else if(indice != n && F[indice+1] -> n > d) {
+        pegarDoProx(indice);
     } else {
         if(indice != n)
             concatenar(indice);
@@ -249,7 +249,7 @@ void Pagina::pegarDoAnt(int indice) {
     return;
 }
 
-void Pagina::pegardoProx(int indice) {
+void Pagina::pegarDoProx(int indice) {
     Pagina *filho = F[indice];
     Pagina *irmao = F[indice+1];
 
@@ -281,7 +281,7 @@ void Pagina::concatenar(int indice) {
     Pagina *filho = F[indice];
     Pagina *irmao = F[indice+1];
 
-    filho->chaves[d-1] = chaves[indice];
+    filho->chaves[d+1] = chaves[indice];
 
     for (int i = 0; i < irmao->n; ++i)
     {
