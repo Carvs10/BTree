@@ -22,14 +22,14 @@ class Pagina
 	void percorrer(); 
 	Pagina *buscar(int chave);  // retorna nullptr se a chave não esta na árvore 
 	void preencher(int indice);
-	void fusao(int indice);
+	void concatenar(int indice);
 
 	// Operacoes associadas a remocao
 	void remover(int chave);
 
-	void removerDaFolha(int indice);
+	void removerDeFolha(int indice);
 
-	void removerDeNode(int indice);
+	void removerDeNaoFolha(int indice);
 
 	int getAntecessor(int indice);
 
@@ -39,8 +39,7 @@ class Pagina
 
 	void pegardoProx(int indice);
 
-	int acheChave(int chave);
-	
+	int acharChave(int chave);
 
     friend class ArvoreB;   
 };
@@ -59,8 +58,6 @@ class ArvoreB
     void inserir (int chave);
 
     void remover(int chave);
-
-
 };
 
 #endif

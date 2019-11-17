@@ -116,7 +116,7 @@ void Pagina::cisar(int i, Pagina *y) {
     n++;
 }
 
-int Pagina::acheChave(int chave)
+int Pagina::acharChave(int chave)
 {
     int indice = 0;
 
@@ -130,31 +130,25 @@ int Pagina::acheChave(int chave)
 
 void Pagina::remover(int chave)
 {
-    int indice = acheChave(chave);
+    int indice = acharChave(chave);
 
-    if (indice < n && chaves[indice] == chave)
-    {
-
-
+    if (indice < n && chaves[indice] == chave) {
         if(folha)
-            removerDaFolha(indice);
+            removerDeFolha(indice);
         else
-            removerDeNode(indice);
-
-    }
-    else
-    {
-
-        if(folha)
-        {
+            removerDeNaoFolha(indice);
+    } else {
+        if(folha) {
             cout << "A chave " << chave << " nao esta na arvore\n";
             return;
         }
 
-        bool flag = ( (indice == n) ? true : false);
+        bool flag = ( (indice == n) ? true : false); 
 
+        if(F[indice]->n < d)
+            preencher(indice);
 
-        if(F[indice] -> n < d)
+        if(flag && indice > n)
             F[indice-1]-> remover(chave);
         else
             F[indice]-> remover(chave);
@@ -163,13 +157,9 @@ void Pagina::remover(int chave)
     return;
 }
 
-void Pagina::removerDaFolha(int indice)
-{
-
-
-    for(int i = indice+1; i < n; ++i)
-    {
-        chave[i -1 ] = chaves[i];
+void Pagina::removerDeFolha(int indice) {
+    for(int i = indice+1; i < n; ++i) {
+        chaves[i - 1] = chaves[i];
     }
 
     n--;
@@ -177,38 +167,27 @@ void Pagina::removerDaFolha(int indice)
     return;
 }
 
-void Pagina::removerDeNode(int indice)
-{
-
+void Pagina::removerDeNaoFolha(int indice) {
     int chave = chaves[indice];
-
 
     if(F[indice] ->n >= d )
     {
         int antecessor = getAntecessor(indice);
         chaves[indice] = antecessor;
         F[indice]-> remover(antecessor); 
-    }
-
-    else if ( F[indice+1] -> n >= d )
-    {
+    } else if ( F[indice+1] -> n >= d ) {
         int sucessor = getSucessor(indice);
         chaves[indice] = sucessor;
         F[indice+1] -> remover(chave);
-    }
-
-    else
-    {
-        fusao(indice);
-        F[indice] =-> remover(chave);
+    } else {
+        concatenar(indice);
+        F[indice]->remover(chave);
     }
 
     return;
 }
 
-int Pagina::getAntecessor(int indice)
-{
-
+int Pagina::getAntecessor(int indice) {
     Pagina *atual = F[indice];
     while(!atual ->folha)
         atual = atual->F[atual->n];
@@ -216,10 +195,8 @@ int Pagina::getAntecessor(int indice)
     return atual->chaves[atual->n-1];
 }
 
-int Pagina::getSucessor(int indice)
-{
-
-    Pagina *atual = C[indice+1];
+int Pagina::getSucessor(int indice) {
+    Pagina *atual = F[indice+1];
 
     while(!atual -> folha)
         atual = atual->F[0];
@@ -228,44 +205,29 @@ int Pagina::getSucessor(int indice)
 }
 
 
-void Pagina::preencher(int indice)
-{
-
-    if(indice != 0 && F[indice-1] ->n >= d)
-    {
+void Pagina::preencher(int indice) {
+    if(indice != 0 && F[indice-1] ->n >= d) {
         pegarDoAnt(indice);
-    }
-
-    else if(indice != n && F[indice+1] -> n >= d)
-    {
+    } else if(indice != n && F[indice+1] -> n >= d) {
         pegardoProx(indice);
-    }
-
-    else
-    {
-
+    } else {
         if(indice != n)
-            fusao(indice);
+            concatenar(indice);
         else
-            fusao(indice-1);
+            concatenar(indice-1);
     }
 
     return;
 }
 
-void Pagina::pegarDoAnt(int indice)
-{
-
+void Pagina::pegarDoAnt(int indice) {
     Pagina *filho = F[indice];
-    Pagina *irmaos = F[indice-1];
-
+    Pagina *irmao = F[indice-1];
 
     for( int i = filho->n-1; i >=0; --i)
         filho->chaves[i+1] = filho->chaves[i];
 
-
-    if(!filho -> folha)
-    {
+    if(!filho -> folha) {
         for(int i =filho->n; i>=0; --i )
         {
             filho->F[i+1] = filho->F[i];
@@ -276,62 +238,87 @@ void Pagina::pegarDoAnt(int indice)
 
     if(!filho->folha)
     {
-        filho->F[0] = irmaos->F[irmaos->n];
+        filho->F[0] = irmao->F[irmao->n];
     }
 
-    chaves[indice-1] = irmaos->chaves[irmaos->n-1];
-
+    chaves[indice-1] = irmao->chaves[irmao->n-1];
 
     filho->n += 1;
-    irmaos-> n -= 1;
+    irmao-> n -= 1;
 
     return;
 }
 
-void Pagina::pegardoProx(int indice)
-{
-
+void Pagina::pegardoProx(int indice) {
     Pagina *filho = F[indice];
-    Pagina *irmaos = F[indice+1];
+    Pagina *irmao = F[indice+1];
 
-
-    filho->chaves[ (filho->n) ] = chaves[indice];
-
+    filho->chaves[(filho->n)] = chaves[indice];
 
     if(!(filho->folha) )
     {
-        filho->F[ (filho->n)+1] = irmaos->F[0];
+        filho->F[ (filho->n)+1] = irmao->F[0];
     }
 
-    chaves[indice] = irmaos->chaves[0];
+    chaves[indice] = irmao->chaves[0];
 
-    for(int i = 1; i < irmaos->n; ++i)
-        irmaos->chaves[i-1] = irmaos->chaves[i];
+    for(int i = 1; i < irmao->n; ++i)
+        irmao->chaves[i-1] = irmao->chaves[i];
 
-    if(!irmaos->folha)
+    if(!irmao->folha)
     {
-        for(int i =1; i <= irmaos->n; ++i)
-            irmaos->F[i-1] = irmaos->F[i];
+        for(int i =1; i <= irmao->n; ++i)
+            irmao->F[i-1] = irmao->F[i];
     }
 
     filho->n += 1;
-    irmaos -= 1;
+    irmao -= 1;
 
     return;
 }
 
-void Pagina::fusao(int indice)
-{
-
+void Pagina::concatenar(int indice) {
     Pagina *filho = F[indice];
-    Pagina *irmaos = F[indice+1];
-
+    Pagina *irmao = F[indice+1];
 
     filho->chaves[d-1] = chaves[indice];
 
-
-    for (int i = 0; i < irmaos->n; ++i)
+    for (int i = 0; i < irmao->n; ++i)
     {
-        
+        filho->F[i+d] = irmao->F[i];
     }    
+
+    for (int i = indice + 1; i < n; i++)
+        chaves[i-1] = chaves[i];
+
+    for(int i = indice + 2; i <= n; i++)
+        F[i-1] = F[i];
+
+    filho->n += irmao->n + 1;
+    n--;
+
+    delete(irmao);
+    return;
+}
+
+void ArvoreB::remover (int chave) {
+    if (!raiz) {
+        cout << "A árvore está vazia\n";
+        return;
+    }
+
+    raiz->remover(chave);
+
+    if (raiz->n == 0) {
+        Pagina *temp = raiz;
+
+        if (raiz->folha)
+            raiz = nullptr;
+        else
+            raiz = raiz->F[0];
+
+        delete temp;
+    }
+
+    return;
 }
